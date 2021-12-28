@@ -1,41 +1,36 @@
 package Leetcode;
-import java.util.Arrays;
 
-public class L24 {
-    public int removeElement(int[] nums, int val) {
-        /*sort the array*/
-        Arrays.sort(nums);
-        /*find the first one*/
-        int start = 0;
-        int end = nums.length - 1;
-        int mid = 0;
-        int len = nums.length;
-        while(start <= end){
-            mid = start + (end - start)/2;
-            if ((nums[mid] == val && mid == 0) || (nums[mid] == val && mid == nums.length - 1) || (nums[mid] == val && nums[mid - 1] != val)){
-                System.out.println("Mid: " + mid);
-                break;
-            }
-            if(nums[mid] > val || (nums[mid] == val && nums[mid - 1] == val)){
-                end = mid - 1;
-            }
-            else{
-                start = mid + 1;
-            }
+
+class L24 {
+
+    public class ListNode {
+        int val;
+        ListNode next;
+        ListNode() {}
+        ListNode(int val) { this.val = val; }
+        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+    }
+
+    public ListNode swapPairs(ListNode head) {
+        /*Iteration*/
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+
+        ListNode prevNode = dummy;
+        while(head != null && head.next != null){
+            /*define prev, first, second*/
+            ListNode firstNode = head;
+            ListNode secondNode = head.next;
+
+            /*swap*/
+            prevNode.next = secondNode;
+            firstNode.next = secondNode.next;
+            secondNode.next = firstNode;
+
+            /*change pointer*/
+            prevNode = firstNode;
+            head = head.next;
         }
-        /*find the rest*/
-        int flag = 0;
-        for(int i = mid; i < nums.length; i++){
-            if(nums[i] != val){
-                // len = nums.length - (i - mid);
-                // System.out.println(flag);
-                nums[mid + flag] = nums[i];
-                flag ++;
-            }
-            else{
-                len --;
-            }
-        }
-        return len;
+        return dummy.next;
     }
 }
